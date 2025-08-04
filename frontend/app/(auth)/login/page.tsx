@@ -1,14 +1,45 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { IoIosArrowBack } from "react-icons/io";
 import Link from "next/link";
+import { useAuth } from "@/app/context/AuthContext";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { ShowPass } from "../register/page";
 
-const page = () => {
+interface FormData {
+  email: string;
+  password: string;
+}
+
+const Loginpage = () => {
+  const { login, error } = useAuth();
+  const [formData, setFormData] = useState<FormData>({
+    email: "",
+    password: "",
+  });
+  const [showPass, setShowPass] = useState<ShowPass>({ condition: false });
+
+  const handleChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { id, value } = event.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [id]: value,
+    }));
+  };
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    login(formData);
+  };
   return (
     <div className="flex items-center justify-center h-screen">
-      <button className="flex items-center gap-1 absolute right-5 md:right-96 bg-[#000b58] text-white rounded top-18 p-2">
+      <button className="flex items-center gap-1 absolute right-5 md:right-96 bg-[#000b58] text-white rounded top-15 p-2">
         <IoIosArrowBack />
         <Link href="/">Back to home</Link>
       </button>
@@ -20,24 +51,47 @@ const page = () => {
           </p>
         </div>
 
-        <form className="w-full">
+        <form className="w-full" onSubmit={handleSubmit}>
           <div className="flex flex-col gap-4">
+            {error && (
+              <div className="bg-red-200 text-red-800 border-1 border-red-800 p-4">
+                <p className="text-sm">{error}</p>
+              </div>
+            )}
             <div className="grid gap-2">
               <Label htmlFor="email" className="text-xs">
                 Email
               </Label>
               <Input
+                onChange={handleChange}
                 id="email"
                 type="email"
                 placeholder="m@example.com"
                 required
               />
             </div>
-            <div className="grid gap-2">
+            <div className="grid gap-2 relative">
               <Label htmlFor="password" className="text-xs">
                 Password
               </Label>
-              <Input id="password" type="password" required />
+              <Input
+                onChange={handleChange}
+                id="password"
+                type={showPass.condition ? "text" : "password"}
+                required
+              />
+
+              {showPass.condition ? (
+                <FaEyeSlash
+                  className="absolute right-3 top-8.5 cursor-pointer"
+                  onClick={() => setShowPass({ condition: false })}
+                />
+              ) : (
+                <FaEye
+                  className="absolute right-3 top-8.5 cursor-pointer"
+                  onClick={() => setShowPass({ condition: true })}
+                />
+              )}
             </div>
             <div className="grid gap-2">
               <Button
@@ -49,14 +103,16 @@ const page = () => {
             </div>
           </div>
         </form>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1">
           {" "}
-          <p className="my-4 text-sm">have no account?</p>
-          <button className="text-[#000b58] text-sm">Login</button>
+          <p className="my-4 text-sm">Don`t have an account? </p>
+          <button className="text-[#000b58] text-sm font-medium">
+            <Link href="/register">register</Link>
+          </button>
         </div>
       </div>
     </div>
   );
 };
 
-export default page;
+export default Loginpage;

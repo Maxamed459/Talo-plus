@@ -56,16 +56,20 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const login = async (userData: any) => {
     try {
-      const { data } = await axios.post("/api/user/login", userData, {
-        withCredentials: true,
-      });
+      const { data } = await axios.post(
+        "http://localhost:3002/api/user/signIn",
+        userData,
+        {
+          withCredentials: true,
+        }
+      );
 
       if (data.success) {
         console.log(data);
         setAuthUser(data.user);
         localStorage.setItem("user", JSON.stringify(data.user));
         setError(null);
-        router.push("/dashboard");
+        router.push("/");
       }
     } catch (err: any) {
       setError(err?.response?.data?.message || "Login failed");
@@ -75,7 +79,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const logout = () => {
     localStorage.removeItem("user");
     setAuthUser(null);
-    router.push("/auth/login");
+    router.push("/login");
   };
 
   return (

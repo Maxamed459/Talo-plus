@@ -17,6 +17,7 @@ import {
 import { useAuth } from "../../context/AuthContext"; // 👈 import your context
 import { IoIosArrowBack } from "react-icons/io";
 import Link from "next/link";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 interface FormData {
   fullname: string;
@@ -25,11 +26,15 @@ interface FormData {
   password: string;
   role: string;
 }
+export interface ShowPass {
+  condition: boolean;
+}
 
 const Registerpage = () => {
   const { registerUser, error } = useAuth(); // 👈 get from context
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+  const [showPass, setShowPass] = useState<ShowPass>({ condition: false });
   const [formData, setFormData] = useState<Omit<FormData, "fullname">>({
     username: "",
     email: "",
@@ -174,16 +179,28 @@ const Registerpage = () => {
                 </Select>
               </div>
 
-              <div className="grid gap-2">
+              <div className="grid gap-2 relative">
                 <Label htmlFor="password" className="text-xs">
                   Password
                 </Label>
                 <Input
                   onChange={handleChange}
                   id="password"
-                  type="password"
+                  type={showPass.condition ? "text" : "password"}
                   required
                 />
+
+                {showPass.condition ? (
+                  <FaEyeSlash
+                    className="absolute right-3 top-8.5 cursor-pointer"
+                    onClick={() => setShowPass({ condition: false })}
+                  />
+                ) : (
+                  <FaEye
+                    className="absolute right-3 top-8.5 cursor-pointer"
+                    onClick={() => setShowPass({ condition: true })}
+                  />
+                )}
               </div>
 
               <div className="grid gap-2">
@@ -199,7 +216,9 @@ const Registerpage = () => {
 
           <div className="flex items-center gap-1 mt-4">
             <p className="text-sm">Already have an account?</p>
-            <button className="text-[#000b58] text-sm">Login</button>
+            <button className="text-[#000b58] text-sm font-medium">
+              <Link href="/login">Login</Link>
+            </button>
           </div>
         </div>
       </div>

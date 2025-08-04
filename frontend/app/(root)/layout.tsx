@@ -29,10 +29,12 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <header className="p-4 shadow-sm">
-          <Header />
-        </header>
-        <AuthProvider>{children}</AuthProvider>
+        <AuthProvider>
+          <header className="p-4 shadow-sm">
+            <Header />
+          </header>
+          {children}
+        </AuthProvider>
       </body>
     </html>
   );

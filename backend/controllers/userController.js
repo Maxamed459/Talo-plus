@@ -76,6 +76,7 @@ export const signIn = async (req, res) => {
       secure: false,
       maxAge: expiresIn * 1000,
     });
+    user.password = undefined;
     res.status(200).json({
       success: true,
       message: "login successfully",
