@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -8,6 +8,7 @@ import Link from "next/link";
 import { useAuth } from "@/app/context/AuthContext";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { ShowPass } from "../register/page";
+import { useRouter } from "next/navigation";
 
 interface FormData {
   email: string;
@@ -15,7 +16,14 @@ interface FormData {
 }
 
 const Loginpage = () => {
-  const { login, error } = useAuth();
+  const { login, error, authUser } = useAuth();
+  const router = useRouter();
+  useEffect(() => {
+    if (authUser) {
+      router.push("/");
+    }
+  }, []);
+
   const [formData, setFormData] = useState<FormData>({
     email: "",
     password: "",
