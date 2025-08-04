@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -18,6 +18,7 @@ import { useAuth } from "../../context/AuthContext"; // 👈 import your context
 import { IoIosArrowBack } from "react-icons/io";
 import Link from "next/link";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { useRouter } from "next/navigation";
 
 interface FormData {
   fullname: string;
@@ -31,7 +32,13 @@ export interface ShowPass {
 }
 
 const Registerpage = () => {
-  const { registerUser, error } = useAuth(); // 👈 get from context
+  const { registerUser, error, authUser } = useAuth(); // 👈 get from context
+  const router = useRouter();
+  useEffect(() => {
+    if (authUser) {
+      router.push("/");
+    }
+  }, []);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [showPass, setShowPass] = useState<ShowPass>({ condition: false });
