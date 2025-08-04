@@ -3,6 +3,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import { userAgent } from "next/server";
 
 // Types
 interface User {
@@ -10,7 +11,6 @@ interface User {
   email: string;
   username: string;
   role: string;
-  profilePic?: string;
 }
 
 interface AuthContextType {
@@ -24,15 +24,28 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [authUser, setAuthUser] = useState<User | null>(null);
+  // const [authUser, setAuthUser] = useState<User | null>(null);
+  const [authUser, setAuthUser] = useState<User | null>(() => {
+    if (typeof window !== "undefined") {
+      const stored = localStorage.getItem("user");
+      try {
+        return stored ? JSON.parse(stored) : null;
+      } catch (err) {
+        console.error("Invalid JSON in localStorage:", err);
+        return null;
+      }
+    }
+    return null;
+  });
+
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
-      setAuthUser(JSON.parse(storedUser));
-      console.log(storedUser);
+      const user = JSON.parse(storedUser);
+      setAuthUser(user);
     }
   }, []);
 
