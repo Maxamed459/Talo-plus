@@ -60,7 +60,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setAuthUser(data.newUser);
         localStorage.setItem("user", JSON.stringify(data.newUser));
         setError(null);
-        router.push("/"); // or homepage
+        router.push("/dashboard"); // or homepage
       }
     } catch (err: any) {
       setError(err?.response?.data?.message || "Registration failed");
@@ -82,7 +82,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setAuthUser(data.user);
         localStorage.setItem("user", JSON.stringify(data.user));
         setError(null);
-        router.push("/");
+        router.push("/dashboard");
       }
     } catch (err: any) {
       setError(err?.response?.data?.message || "Login failed");

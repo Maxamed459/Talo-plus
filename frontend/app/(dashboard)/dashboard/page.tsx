@@ -1,7 +1,6 @@
 "use client";
-import { useAuth } from "@/app/context/AuthContext";
+// import { useAuth } from "@/app/context/AuthContext";
 import { AppSidebar } from "@/components/app-sidebar";
-import { Avatar } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -10,9 +9,10 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { Bell, Search } from "lucide-react";
+import { CiUser } from "react-icons/ci";
 
 export default function Page() {
-  const { authUser } = useAuth();
+  // const { authUser } = useAuth();
   return (
     <SidebarProvider>
       <AppSidebar />
@@ -29,19 +29,13 @@ export default function Page() {
                 <Search className="w-4 absolute top-1.5 left-3" />
                 <Input type="text" id="search" className="w-full pl-9" />
               </div>
-              <div className="flex items-center space-x-5 w-1/3">
+              <div className="flex items-center justify-end space-x-5 w-1/3">
                 <div className="flex items-center gap-1">
                   <Bell className="w-4 h-4" />
                   <span>Notifications</span>
                 </div>
-                <div className="flex items-center gap-1">
-                  <div className="w-9 h-9 bg-gradient-to-b from-[#000b58] to-purple-700 rounded-full">
-                    <Avatar />
-                  </div>
-                  <div className="text-sm">
-                    <p>{authUser?.username}</p>
-                    <p>{authUser?.email}</p>
-                  </div>
+                <div className="flex items-center justify-center w-9 h-9 bg-gradient-to-b from-[#000b58] to-purple-700 rounded-full">
+                  <CiUser className="text-white w-7 h-7" />
                 </div>
               </div>
             </div>

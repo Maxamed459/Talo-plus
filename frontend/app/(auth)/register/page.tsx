@@ -36,7 +36,7 @@ const Registerpage = () => {
   const router = useRouter();
   useEffect(() => {
     if (authUser) {
-      router.push("/");
+      router.push("/dashboard");
     }
   }, []);
   const [firstName, setFirstName] = useState("");

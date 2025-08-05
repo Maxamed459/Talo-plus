@@ -16,7 +16,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       avatar: "/avatars/shadcn.jpg",
     },
   };
-  console.log(authUser);
   return (
     <Sidebar collapsible="icon" {...props}>
       <h1 className="text-3xl font-bold text-center py-4">Talo +</h1>
