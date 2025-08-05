@@ -18,7 +18,7 @@ const Header = () => {
           <ul className="flex space-x-4 text-[#000b58] text-[18px]">
             {authUser && (
               <li>
-                <Link href="/">dashboard</Link>
+                <Link href="/dashboard">dashboard</Link>
               </li>
             )}
             <li>
