@@ -198,12 +198,12 @@ const Registerpage = () => {
                 />
 
                 {showPass.condition ? (
-                  <FaEyeSlash
+                  <FaEye
                     className="absolute right-3 top-8.5 cursor-pointer"
                     onClick={() => setShowPass({ condition: false })}
                   />
                 ) : (
-                  <FaEye
+                  <FaEyeSlash
                     className="absolute right-3 top-8.5 cursor-pointer"
                     onClick={() => setShowPass({ condition: true })}
                   />
