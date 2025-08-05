@@ -181,6 +181,7 @@ const Registerpage = () => {
                         Medical Student
                       </SelectItem>
                       <SelectItem value="coach">Coach</SelectItem>
+                      <SelectItem value="pharmacist">Pharmacist</SelectItem>
                     </SelectGroup>
                   </SelectContent>
                 </Select>
