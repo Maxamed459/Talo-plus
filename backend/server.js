@@ -17,6 +17,11 @@ app.use("/api/user", userRouter);
 
 await connectDB();
 
-app.listen(PORT, () => {
-  console.log(`server runs on http://localhost:${PORT}`);
-});
+if (process.env.NODE_ENV !== "production") {
+  app.listen(PORT, () => {
+    console.log(`server runs on http://localhost:${PORT}`);
+  });
+}
+
+// export server for vercel
+export default server;
