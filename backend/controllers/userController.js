@@ -29,8 +29,16 @@ export const signUp = async (req, res) => {
       role,
     });
 
-    console.log(newUser);
     await newUser.save();
+    const expiresIn = 7 * 24 * 60 * 60; // 7days
+
+    const token = generateToken(newUser._id, expiresIn);
+
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: false,
+      maxAge: expiresIn * 1000, // 7days to milliseconds
+    });
     res.status(201).json({
       success: true,
       message: "Account created successfully",
