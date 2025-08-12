@@ -25,16 +25,12 @@ export default function Page() {
               className="mr-2 data-[orientation=vertical]:h-4"
             />
             <div className="flex items-center justify-between gap-4 p-4 w-full">
-              <div className="w-2/3 relative">
+              <div className="w-4/5 relative">
                 <Search className="w-4 absolute top-1.5 left-3" />
                 <Input type="text" id="search" className="w-full pl-9" />
               </div>
-              <div className="flex items-center justify-end space-x-5 w-1/3">
-                <div className="flex items-center gap-1">
-                  <Bell className="w-4 h-4" />
-                  <span>Notifications</span>
-                </div>
-                <div className="flex items-center justify-center w-9 h-9 bg-gradient-to-b from-[#000b58] to-purple-700 rounded-full">
+              <div className="flex items-center justify-end space-x-5 w-1/5 ">
+                <div className="flex items-center justify-center w-5 h-5 md:w-9 md:h-9 bg-gradient-to-b from-[#000b58] to-purple-700 rounded-full">
                   <CiUser className="text-white w-7 h-7" />
                 </div>
               </div>
