@@ -100,6 +100,25 @@ export const signIn = async (req, res) => {
   }
 };
 
+export const logout = async (req, res) => {
+  try {
+    res.clearCookie("token", {
+      httpOnly: true,
+      secure: false,
+      sameSite: "strict",
+    });
+    res.status(200).json({
+      success: true,
+      message: "logged out successfully.",
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 const client = new OAuth2Client(GOOGLE_CLIENT_ID);
 
 export const googleSignIn = async (req, res) => {

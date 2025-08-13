@@ -38,17 +38,19 @@ export const getUserPosts = async (req, res) => {
     const posts = await Question.find({ author: req.user.id })
       .populate({
         path: "author",
-        model: "Question",
+        model: "User",
         select: "username role",
       })
       .sort({ createdAt: -1 });
 
     return res.status(200).json({
+      success: true,
       message: "here are the posts",
       posts,
     });
   } catch (error) {
     return res.status(500).json({
+      success: false,
       message: error,
     });
   }
@@ -129,6 +131,53 @@ export const deleteQuestion = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: error.message,
+    });
+  }
+};
+
+export const getAllQuestions = async (req, res) => {
+  try {
+    const {
+      search = "",
+      tag,
+      sortBy = "newest",
+      limit = 10,
+      page = 1,
+    } = req.query;
+    const query = {};
+
+    if (search) {
+      query.$or = [
+        { title: { $regex: search, $options: "i" } },
+        { description: { $regex: search, $options: "i" } },
+      ];
+    }
+
+    if (tag) query.tags = tag;
+
+    const skip = (Number(page) - 1) * Number(limit);
+
+    const posts = await Question.find(query)
+      .populate("author", "username profilePicture role")
+      .sort(sortBy === "newest" ? { createdAt: -1 } : { createdAt: 1 })
+      .skip(skip)
+      .limit(Number(limit));
+
+    const totalPosts = await Question.countDocuments(query);
+
+    res.status(200).json({
+      success: true,
+      count: posts.length,
+      total: totalPosts,
+      currentPage: Number(page),
+      totalPages: Math.ceil(totalPosts / Number(limit)),
+      data: posts,
+    });
+  } catch (error) {
+    console.error("Error fetching questions:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch posts",
     });
   }
 };

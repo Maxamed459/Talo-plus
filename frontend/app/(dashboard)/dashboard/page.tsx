@@ -1,51 +1,34 @@
-"use client";
-// import { useAuth } from "@/app/context/AuthContext";
-import { AppSidebar } from "@/components/app-sidebar";
 import { Input } from "@/components/ui/input";
-import { Separator } from "@/components/ui/separator";
-import {
-  SidebarInset,
-  SidebarProvider,
-  SidebarTrigger,
-} from "@/components/ui/sidebar";
-import { Bell, Search } from "lucide-react";
-import { CiUser } from "react-icons/ci";
+import { Search } from "lucide-react";
+import React from "react";
+import { GrNotification } from "react-icons/gr";
+import AllQuestions from "../_components/AllQuestions";
 
-export default function Page() {
-  // const { authUser } = useAuth();
+const DashboardPage = () => {
   return (
-    <SidebarProvider>
-      <AppSidebar />
-      <SidebarInset>
-        <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-16">
-          <div className="flex items-center gap-2 px-4 w-full">
-            <SidebarTrigger className="-ml-1" />
-            <Separator
-              orientation="vertical"
-              className="mr-2 data-[orientation=vertical]:h-4"
+    <div>
+      <div className="flex items-center justify-between w-full">
+        <form className="w-[95%] md:w-4/5">
+          <div className="space-y-1 relative">
+            <Search className="w-5 h-5 absolute top-2 left-2.5 text-gray-500" />
+            <Input
+              id="firstName"
+              type="text"
+              className="w-[85%] px-9"
+              placeholder="Search"
+              required
             />
-            <div className="flex items-center justify-between gap-4 p-4 w-full">
-              <div className="w-4/5 relative">
-                <Search className="w-4 absolute top-1.5 left-3" />
-                <Input type="text" id="search" className="w-full pl-9" />
-              </div>
-              <div className="flex items-center justify-end space-x-5 w-1/5 ">
-                <div className="flex items-center justify-center w-5 h-5 md:w-9 md:h-9 bg-gradient-to-b from-[#000b58] to-purple-700 rounded-full">
-                  <CiUser className="text-white w-7 h-7" />
-                </div>
-              </div>
-            </div>
           </div>
-        </header>
-        <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-          <div className="grid auto-rows-min gap-4 md:grid-cols-3">
-            <div className="bg-muted/50 aspect-video rounded-xl" />
-            <div className="bg-muted/50 aspect-video rounded-xl" />
-            <div className="bg-muted/50 aspect-video rounded-xl" />
-          </div>
-          <div className="bg-muted/50 min-h-[100vh] flex-1 rounded-xl md:min-h-min" />
+        </form>
+        <div className="w-1/5 items-center gap-1 hidden md:flex cursor-pointer">
+          <div className="w-7 h-7 bg-[#6967FB] rounded-full"></div>
+          <GrNotification className="absolute right-46.5 text-white" />
+          <span>Notification</span>
         </div>
-      </SidebarInset>
-    </SidebarProvider>
+      </div>
+      <AllQuestions />
+    </div>
   );
-}
+};
+
+export default DashboardPage;

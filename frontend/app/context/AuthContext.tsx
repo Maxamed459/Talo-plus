@@ -3,7 +3,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import { userAgent } from "next/server";
+import Cookies from "js-cookie";
 
 // Types
 interface User {
@@ -37,6 +37,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
     return null;
   });
+  const url = process.env.NEXT_PUBLIC_BACKEND_URL;
 
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
@@ -51,10 +52,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const registerUser = async (userData: any) => {
     try {
-      const { data } = await axios.post(
-        "http://localhost:3002/api/user/signUp",
-        userData
-      );
+      const { data } = await axios.post(`${url}/api/user/signUp`, userData);
       if (data.success) {
         console.log(data);
         setAuthUser(data.newUser);
@@ -69,13 +67,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const login = async (userData: any) => {
     try {
-      const { data } = await axios.post(
-        "http://localhost:3002/api/user/signIn",
-        userData,
-        {
-          withCredentials: true,
-        }
-      );
+      const { data } = await axios.post(`${url}/api/user/signIn`, userData, {
+        withCredentials: true,
+      });
 
       if (data.success) {
         console.log(data);
@@ -89,10 +83,24 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  const logout = () => {
-    localStorage.removeItem("user");
-    setAuthUser(null);
-    router.push("/login");
+  const logout = async () => {
+    try {
+      const { data } = await axios.post(
+        `${url}/api/user/logout`,
+        {},
+        {
+          withCredentials: true,
+        }
+      );
+
+      if (data.success) {
+        localStorage.removeItem("user");
+        setAuthUser(null);
+        router.push("/login");
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
