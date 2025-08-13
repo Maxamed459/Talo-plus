@@ -164,7 +164,6 @@ export const getAllQuestions = async (req, res) => {
       .limit(Number(limit));
 
     const totalPosts = await Question.countDocuments(query);
-
     res.status(200).json({
       success: true,
       count: posts.length,
