@@ -1,7 +1,8 @@
 import { generateToken } from "../lib/generateToken.js";
 import User from "../models/User.js";
 import { OAuth2Client } from "google-auth-library";
-import { GOOGLE_CLIENT_ID } from "../config/config.js";
+import { GOOGLE_CLIENT_ID, NODE_ENV } from "../config/config.js";
+import { NODE_ENV } from "../config/config.js";
 
 export const signUp = async (req, res) => {
   try {
@@ -36,8 +37,9 @@ export const signUp = async (req, res) => {
 
     res.cookie("token", token, {
       httpOnly: true,
-      secure: false,
-      maxAge: expiresIn * 1000, // 7days to milliseconds
+      secure: NODE_ENV === "PRODUCTION", // true in production, false in dev
+      sameSite: NODE_ENV === "PRODUCTION" ? "None" : "Lax", // cross-site in prod, lax in dev
+      maxAge: expiresIn * 1000, // e.g., 7 days
     });
     res.status(201).json({
       success: true,
@@ -81,8 +83,9 @@ export const signIn = async (req, res) => {
 
     res.cookie("token", token, {
       httpOnly: true,
-      secure: false,
-      maxAge: expiresIn * 1000,
+      secure: NODE_ENV === "PRODUCTION", // true in production, false in dev
+      sameSite: NODE_ENV === "PRODUCTION" ? "None" : "Lax", // cross-site in prod, lax in dev
+      maxAge: expiresIn * 1000, // e.g., 7 days
     });
     user.password = undefined;
     res.status(200).json({
@@ -104,8 +107,8 @@ export const logout = async (req, res) => {
   try {
     res.clearCookie("token", {
       httpOnly: true,
-      secure: false,
-      sameSite: "strict",
+      secure: NODE_ENV === "PRODUCTION", // true in production, false in dev
+      sameSite: NODE_ENV === "PRODUCTION" ? "None" : "Lax", // cross-site in prod, lax in dev
     });
     res.status(200).json({
       success: true,
