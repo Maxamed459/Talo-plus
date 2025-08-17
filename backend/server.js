@@ -1,5 +1,5 @@
 import express, { json } from "express";
-import { PORT } from "./config/config.js";
+import { NODE_ENV, PORT } from "./config/config.js";
 import connectDB from "./config/db.js";
 import userRouter from "./routes/userRoutes.js";
 import cors from "cors";
@@ -21,6 +21,11 @@ app.use("/api/post", postRouter);
 
 await connectDB();
 
-app.listen(PORT, () => {
-  console.log(`server runs on http://localhost:${PORT}`);
-});
+if (NODE_ENV !== "production") {
+  app.listen(PORT, () => {
+    console.log(`server runs on http://localhost:${PORT}`);
+  });
+}
+
+// export server for vercel
+export default server;
