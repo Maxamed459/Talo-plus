@@ -13,9 +13,8 @@ app.use(
   cors({
     origin: [
       "http://localhost:3000", // local dev
-      "https://your-frontend.vercel.app", // deployed frontend
+      "https://talo-plus.vercel.app", // deployed frontend
     ],
-
     credentials: true,
   })
 );
