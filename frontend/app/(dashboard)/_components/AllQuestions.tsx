@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { ThumbsDown, ThumbsUp } from "lucide-react";
 import { FaThumbsDown, FaThumbsUp } from "react-icons/fa";
 import { formatMessageTime } from "@/app/lib/foramatData";
@@ -42,8 +42,9 @@ const AllQuestions = () => {
       if (data.success) {
         setPosts(data.data);
       }
-    } catch (err: any) {
-      setError(err?.response?.data?.message || "Failed to fetch posts");
+    } catch (err) {
+      const axiosError = err as AxiosError<{ message: string }>;
+      setError(axiosError?.response?.data?.message || "Failed to fetch posts");
     } finally {
       setLoading(false);
     }

@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Post } from "../../_components/AllQuestions";
@@ -14,32 +14,33 @@ const DiscoverPage = () => {
 
   const url = process.env.NEXT_PUBLIC_BACKEND_URL;
 
-  const fetchPosts = async () => {
-    setLoading(true);
-    setError("");
-    try {
-      const { data } = await axios.get(`${url}/api/post/get-all-posts`, {
-        params: {
-          search,
-          tag,
-        },
-        withCredentials: true,
-      });
-
-      if (data.success) {
-        setPosts(data.data);
-      }
-    } catch (err: any) {
-      setError(err?.response?.data?.message || "Failed to fetch posts");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // fetch posts on first load
   useEffect(() => {
+    const fetchPosts = async () => {
+      setLoading(true);
+      setError("");
+      try {
+        const { data } = await axios.get(`${url}/api/post/get-all-posts`, {
+          params: {
+            search,
+            tag,
+          },
+          withCredentials: true,
+        });
+
+        if (data.success) {
+          setPosts(data.data);
+        }
+      } catch (err) {
+        const axiosError = err as AxiosError<{ message: string }>;
+        setError(
+          axiosError?.response?.data?.message || "Failed to fetch posts"
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
     fetchPosts();
-  }, []);
+  }, [search, tag, url]);
 
   return (
     <div className="p-6 w-[90%] mx-auto">

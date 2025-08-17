@@ -2,7 +2,6 @@ import React from "react";
 import { menuItemsData } from "../assets";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useAuth } from "@/app/context/AuthContext";
 
 interface Sideprops {
   setSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>;
