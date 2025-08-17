@@ -38,7 +38,7 @@ const Registerpage = () => {
     if (authUser) {
       router.push("/dashboard");
     }
-  }, []);
+  }, [authUser, router]);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [showPass, setShowPass] = useState<ShowPass>({ condition: false });

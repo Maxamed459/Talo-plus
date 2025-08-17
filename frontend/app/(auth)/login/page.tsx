@@ -22,7 +22,7 @@ const Loginpage = () => {
     if (authUser) {
       router.push("/dashboard");
     }
-  }, []);
+  }, [authUser, router]);
 
   const [formData, setFormData] = useState<FormData>({
     email: "",

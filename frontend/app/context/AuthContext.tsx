@@ -2,8 +2,7 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import axios from "axios";
-import Cookies from "js-cookie";
+import axios, { AxiosError } from "axios";
 
 // Types
 interface User {
@@ -13,11 +12,19 @@ interface User {
   role: string;
 }
 
+interface UserData extends User {
+  password: string;
+}
+interface LoginUserData {
+  email: string;
+  password: string;
+}
+
 interface AuthContextType {
   authUser: User | null;
   error: string | null;
-  registerUser: (userData: any) => Promise<void>;
-  login: (userData: any) => Promise<void>;
+  registerUser: (userData: UserData) => Promise<void>;
+  login: (userData: LoginUserData) => Promise<void>;
   logout: () => void;
 }
 
@@ -50,7 +57,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }, []);
 
-  const registerUser = async (userData: any) => {
+  const registerUser = async (userData: UserData) => {
     try {
       const { data } = await axios.post(`${url}/api/user/signUp`, userData);
       if (data.success) {
@@ -60,12 +67,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setError(null);
         router.push("/dashboard"); // or homepage
       }
-    } catch (err: any) {
-      setError(err?.response?.data?.message || "Registration failed");
+    } catch (err) {
+      const axiosError = err as AxiosError<{ message: string }>;
+      setError(axiosError?.response?.data?.message || "Registration failed");
     }
   };
 
-  const login = async (userData: any) => {
+  const login = async (userData: LoginUserData) => {
     try {
       const { data } = await axios.post(`${url}/api/user/signIn`, userData, {
         withCredentials: true,
@@ -78,8 +86,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setError(null);
         router.push("/dashboard");
       }
-    } catch (err: any) {
-      setError(err?.response?.data?.message || "Login failed");
+    } catch (err) {
+      const axiosError = err as AxiosError<{ message: string }>;
+      setError(axiosError?.response?.data?.message || "Login failed");
     }
   };
 
