@@ -22,7 +22,7 @@ const DashboardPage = () => {
         </form>
         <div className="w-1/5 items-center gap-1 hidden md:flex cursor-pointer">
           <div className="w-7 h-7 bg-[#6967FB] rounded-full"></div>
-          <GrNotification className="absolute right-46.5 text-white" />
+          <GrNotification className="absolute right-49.5 text-white" />
           <span>Notification</span>
         </div>
       </div>
