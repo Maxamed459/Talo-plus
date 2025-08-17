@@ -32,27 +32,29 @@ const AllQuestions = () => {
     }));
   };
 
-  const fetchPosts = async () => {
-    setLoading(true);
-    setError("");
-    try {
-      const { data } = await axios.get(`${url}/api/post/get-all-posts`, {
-        withCredentials: true,
-      });
-      if (data.success) {
-        setPosts(data.data);
-      }
-    } catch (err) {
-      const axiosError = err as AxiosError<{ message: string }>;
-      setError(axiosError?.response?.data?.message || "Failed to fetch posts");
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
+    const fetchPosts = async () => {
+      setLoading(true);
+      setError("");
+      try {
+        const { data } = await axios.get(`${url}/api/post/get-all-posts`, {
+          withCredentials: true,
+        });
+        if (data.success) {
+          setPosts(data.data);
+        }
+      } catch (err) {
+        const axiosError = err as AxiosError<{ message: string }>;
+        setError(
+          axiosError?.response?.data?.message || "Failed to fetch posts"
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchPosts();
-  }, []);
+  }, [url]);
 
   return (
     <div className="w-full mt-4 mx-auto">
