@@ -2,7 +2,6 @@ import { generateToken } from "../lib/generateToken.js";
 import User from "../models/User.js";
 import { OAuth2Client } from "google-auth-library";
 import { GOOGLE_CLIENT_ID, NODE_ENV } from "../config/config.js";
-import { NODE_ENV } from "../config/config.js";
 
 export const signUp = async (req, res) => {
   try {
@@ -107,8 +106,8 @@ export const logout = async (req, res) => {
   try {
     res.clearCookie("token", {
       httpOnly: true,
-      secure: NODE_ENV === "PRODUCTION", // true in production, false in dev
-      sameSite: NODE_ENV === "PRODUCTION" ? "None" : "Lax", // cross-site in prod, lax in dev
+      secure: NODE_ENV === "production",
+      sameSite: NODE_ENV === "production" ? "None" : "Lax",
     });
     res.status(200).json({
       success: true,
