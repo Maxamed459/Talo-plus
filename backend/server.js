@@ -11,7 +11,11 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: [
+      "http://localhost:3000", // local dev
+      "https://your-frontend.vercel.app", // deployed frontend
+    ],
+
     credentials: true,
   })
 );
@@ -28,4 +32,4 @@ if (NODE_ENV !== "production") {
 }
 
 // export server for vercel
-export default server;
+export default app;
