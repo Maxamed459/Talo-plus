@@ -14,33 +14,31 @@ const DiscoverPage = () => {
 
   const url = process.env.NEXT_PUBLIC_BACKEND_URL;
 
-  useEffect(() => {
-    const fetchPosts = async () => {
-      setLoading(true);
-      setError("");
-      try {
-        const { data } = await axios.get(`${url}/api/post/get-all-posts`, {
-          params: {
-            search,
-            tag,
-          },
-          withCredentials: true,
-        });
+  const fetchPosts = useCallback(async () => {
+    setLoading(true);
+    setError("");
+    try {
+      const { data } = await axios.get(`${url}/api/post/get-all-posts`, {
+        params: {
+          search,
+          tag,
+        },
+        withCredentials: true,
+      });
 
-        if (data.success) {
-          setPosts(data.data);
-        }
-      } catch (err) {
-        const axiosError = err as AxiosError<{ message: string }>;
-        setError(
-          axiosError?.response?.data?.message || "Failed to fetch posts"
-        );
-      } finally {
-        setLoading(false);
+      if (data.success) {
+        setPosts(data.data);
       }
-    };
-    fetchPosts();
+    } catch (err) {
+      const axiosError = err as AxiosError<{ message: string }>;
+      setError(axiosError?.response?.data?.message || "Failed to fetch posts");
+    } finally {
+      setLoading(false);
+    }
   }, [search, tag, url]);
+  useEffect(() => {
+    fetchPosts();
+  }, [fetchPosts]);
 
   return (
     <div className="p-6 w-[90%] mx-auto">
