@@ -11,10 +11,17 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: [
-      "http://localhost:3000", // local dev
-      "https://talo-plus.vercel.app", // deployed frontend
-    ],
+    origin: function (origin, callback) {
+      const whitelist = [
+        "http://localhost:3000",
+        "https://talo-plus.vercel.app",
+      ];
+      if (!origin || whitelist.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
   })
 );
