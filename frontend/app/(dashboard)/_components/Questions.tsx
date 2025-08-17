@@ -2,7 +2,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Question } from "../dashboard/post/page";
-import { LiaKeySolid } from "react-icons/lia";
 import { ThumbsDown, ThumbsUp } from "lucide-react";
 import { formatMessageTime } from "@/app/lib/foramatData";
 import { FaThumbsDown, FaThumbsUp } from "react-icons/fa";
@@ -32,19 +31,6 @@ const Questions = () => {
       [postId]: !prev[postId],
     }));
   };
-
-  //   useEffect(() => {
-  //     const fetchQuestions = async () => {
-  //       const { data } = await axios.get(`${url}/api/post/get-user-posts`, {
-  //         withCredentials: true,
-  //       });
-  //       if (data.success) {
-  //         setQuestions(data.posts);
-  //         console.log(questions);
-  //       }
-  //     };
-  //     fetchQuestions();
-  //   }, []);
 
   useEffect(() => {
     const fetchQuestions = async () => {
