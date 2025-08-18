@@ -84,7 +84,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setAuthUser(data.user);
         localStorage.setItem("user", JSON.stringify(data.user));
         setError(null);
-        // router.push("/dashboard");
+        router.push("/dashboard");
       }
     } catch (err) {
       const axiosError = err as AxiosError<{ message: string }>;
