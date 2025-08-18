@@ -36,8 +36,8 @@ export const signUp = async (req, res) => {
 
     res.cookie("token", token, {
       httpOnly: true,
-      secure: NODE_ENV === "PRODUCTION", // true in production, false in dev
-      sameSite: NODE_ENV === "PRODUCTION" ? "None" : "Lax", // cross-site in prod, lax in dev
+      secure: NODE_ENV === "production", // true in production, false in dev
+      sameSite: NODE_ENV === "production" ? "None" : "Lax", // cross-site in prod, lax in dev
       maxAge: expiresIn * 1000, // e.g., 7 days
     });
     res.status(201).json({
@@ -82,8 +82,8 @@ export const signIn = async (req, res) => {
 
     res.cookie("token", token, {
       httpOnly: true,
-      secure: NODE_ENV === "PRODUCTION", // true in production, false in dev
-      sameSite: NODE_ENV === "PRODUCTION" ? "None" : "Lax", // cross-site in prod, lax in dev
+      secure: NODE_ENV === "production", // true in production, false in dev
+      sameSite: NODE_ENV === "production" ? "None" : "Lax", // cross-site in prod, lax in dev
       maxAge: expiresIn * 1000, // e.g., 7 days
     });
     user.password = undefined;
