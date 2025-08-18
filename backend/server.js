@@ -15,7 +15,7 @@ app.use(
       "http://localhost:3000", // dev
       "https://talo-plus.vercel.app", // production
     ],
-    credentials: true, // ✅ required for cookies
+    credentials: true,
   })
 );
 
