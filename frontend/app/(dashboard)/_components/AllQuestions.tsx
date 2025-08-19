@@ -4,6 +4,7 @@ import axios, { AxiosError } from "axios";
 import { ThumbsDown, ThumbsUp } from "lucide-react";
 import { FaThumbsDown, FaThumbsUp } from "react-icons/fa";
 import { formatMessageTime } from "@/app/lib/foramatData";
+import { useRouter } from "next/navigation";
 
 export interface Post {
   _id: string;
@@ -19,18 +20,11 @@ export interface Post {
 }
 
 const AllQuestions = () => {
+  const router = useRouter();
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const url = process.env.NEXT_PUBLIC_BACKEND_URL;
-  const [likedPosts, setLikedPosts] = useState<{ [key: string]: boolean }>({});
-
-  const toggleLike = (postId: string) => {
-    setLikedPosts((prev) => ({
-      ...prev,
-      [postId]: !prev[postId],
-    }));
-  };
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -64,6 +58,7 @@ const AllQuestions = () => {
       <div className="flex flex-col gap-4">
         {posts.map((post) => (
           <div
+            onClick={() => router.push(`/dashboard/${post._id}`)}
             key={post._id}
             className="w-full p-2 border-1 border-gray-100/10 shadow"
           >
@@ -71,13 +66,13 @@ const AllQuestions = () => {
               <div className="w-4/5">
                 <div className="flex items-center gap-1 mb-4">
                   <div className="w-7 h-7 flex items-center justify-center bg-[#6A69FD] rounded-full">
-                    <p className="text-xl text-center text-white mb-1">
+                    <p className="text-xl font-medium text-center text-white">
                       {post.author.username.charAt(0)}
                     </p>
                   </div>
                   <div className="-space-y-1.5 text-sm">
                     <p>{post.author.username}</p>
-                    <p className="text-gray-500">{post.author.role}</p>
+                    <p className="text-gray-500 text-xs">{post.author.role}</p>
                   </div>
                 </div>
                 <div className="">
@@ -98,40 +93,7 @@ const AllQuestions = () => {
                 </div>
               </div>
               <div className="w-1/5 flex flex-col items-center justify-between">
-                <p>{formatMessageTime(post.createdAt)}</p>
-                <div className="flex items-center justify-between gap-9">
-                  {likedPosts[post._id] ? (
-                    <>
-                      <FaThumbsUp
-                        onClick={() => toggleLike(post._id)}
-                        className="w-5 h-5"
-                      />
-                    </>
-                  ) : (
-                    <>
-                      <ThumbsUp
-                        onClick={() => toggleLike(post._id)}
-                        className="w-5 h-5"
-                      />
-                    </>
-                  )}
-
-                  {likedPosts[post._id] ? (
-                    <>
-                      <ThumbsDown
-                        onClick={() => toggleLike(post._id)}
-                        className="w-5 h-5"
-                      />
-                    </>
-                  ) : (
-                    <>
-                      <FaThumbsDown
-                        onClick={() => toggleLike(post._id)}
-                        className="w-5 h-5"
-                      />
-                    </>
-                  )}
-                </div>
+                <p className="text-sm">{formatMessageTime(post.createdAt)}</p>
               </div>
             </div>
           </div>
