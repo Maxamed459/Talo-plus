@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import Question from "../models/Questions.js";
 
 export const postQuestion = async (req, res) => {
@@ -177,6 +178,41 @@ export const getAllQuestions = async (req, res) => {
     res.status(500).json({
       success: false,
       message: "Failed to fetch posts",
+    });
+  }
+};
+
+export const getQuestionById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (!id || !mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({
+        success: false,
+        message: "The question id is required",
+      });
+    }
+
+    const post = await Question.findById(id).populate({
+      path: "author",
+      model: "User",
+      select: "username role",
+    });
+
+    if (!post) {
+      return res.status(404).json({
+        success: false,
+        message: "Question not found",
+      });
+    }
+    return res.status(200).json({
+      success: true,
+      message: "Question found successfully.",
+      post,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
     });
   }
 };
