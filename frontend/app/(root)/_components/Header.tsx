@@ -35,7 +35,7 @@ const Header = () => {
             <>
               <button
                 className="px-4 py-2 bg-gradient-to-r from-[#000b58] to-purple-700 text-white rounded"
-                onClick={logout}
+                onClick={() => logout()}
               >
                 <Link href="/register">Logout</Link>
               </button>
