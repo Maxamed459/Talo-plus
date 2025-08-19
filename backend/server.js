@@ -5,6 +5,7 @@ import userRouter from "./routes/userRoutes.js";
 import cors from "cors";
 import postRouter from "./routes/postRouter.js";
 import cookieParser from "cookie-parser";
+import answerRouter from "./routes/answerRouter.js";
 
 const app = express();
 app.use(express.json());
@@ -21,6 +22,7 @@ app.use(
 
 app.use("/api/user", userRouter);
 app.use("/api/post", postRouter);
+app.use("/api/answer", answerRouter);
 
 await connectDB();
 
