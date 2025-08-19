@@ -13,8 +13,6 @@ const answerSchema = new mongoose.Schema(
       ref: "Question",
       required: true,
     },
-    upvotes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
-    isVerified: { type: Boolean, default: false }, // admin can verify correct answer
   },
   { timestamps: true }
 );
