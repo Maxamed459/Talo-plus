@@ -50,11 +50,7 @@ const Questionpage = () => {
         }
       );
       if (data.success) {
-        setFormData({
-          title: "",
-          description: "",
-          tags: [],
-        });
+        console.log("data");
       }
     } catch (error) {
       console.log(error);
@@ -81,7 +77,6 @@ const Questionpage = () => {
               </Label>
               <Input
                 onChange={handleChange}
-                value={formData.title}
                 id="title"
                 type="text"
                 placeholder="Enter the title of your question"
@@ -93,7 +88,6 @@ const Questionpage = () => {
                 description
               </Label>
               <Textarea
-                value={formData.description}
                 id="description"
                 onChange={handleChange}
                 placeholder="Enter the content of your question"
@@ -103,13 +97,7 @@ const Questionpage = () => {
               <Label htmlFor="tags" className="text-xs">
                 tags
               </Label>
-              <Input
-                onChange={handleChange}
-                id="tags"
-                type="text"
-                required
-                value={formData.tags}
-              />
+              <Input onChange={handleChange} id="tags" type="text" required />
             </div>
             <div className="grid gap-2">
               <Button
