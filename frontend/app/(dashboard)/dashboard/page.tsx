@@ -6,7 +6,7 @@ import AllQuestions from "../_components/AllQuestions";
 
 const DashboardPage = () => {
   return (
-    <div>
+    <div className="p-4">
       <div className="flex items-center justify-between w-full">
         <form className="w-[95%] md:w-4/5">
           <div className="space-y-1 relative">

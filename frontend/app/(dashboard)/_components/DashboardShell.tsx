@@ -20,7 +20,7 @@ export default function DashboardShell({
   return (
     <div className="w-full flex h-screen">
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-      <div className="flex-1 bg-slate-50 p-4 overflow-auto">{children}</div>
+      <div className="flex-1 bg-slate-50 overflow-auto">{children}</div>
       {sidebarOpen ? (
         <X
           className="absolute top-3 right-3 p-2 z-50 bg-white rounded-md shadow w-10 h-10 text-gray-600 sm:hidden"

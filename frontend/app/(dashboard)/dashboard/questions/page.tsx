@@ -3,7 +3,7 @@ import Questions from "../../_components/Questions";
 
 const page = () => {
   return (
-    <div>
+    <div className="p-4">
       <Questions />
     </div>
   );

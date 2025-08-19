@@ -2,9 +2,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Question } from "../dashboard/post/page";
-import { ThumbsDown, ThumbsUp } from "lucide-react";
 import { formatMessageTime } from "@/app/lib/foramatData";
-import { FaThumbsDown, FaThumbsUp } from "react-icons/fa";
 
 export interface Author {
   _id: string;
@@ -23,14 +21,6 @@ interface QuestionsType extends Question {
 const Questions = () => {
   const url = process.env.NEXT_PUBLIC_BACKEND_URL;
   const [questions, setQuestions] = useState<QuestionsType[]>([]);
-  const [likedPosts, setLikedPosts] = useState<{ [key: string]: boolean }>({});
-
-  const toggleLike = (postId: string) => {
-    setLikedPosts((prev) => ({
-      ...prev,
-      [postId]: !prev[postId],
-    }));
-  };
 
   useEffect(() => {
     const fetchQuestions = async () => {
@@ -80,39 +70,6 @@ const Questions = () => {
             </div>
             <div className="w-1/5 flex flex-col items-center justify-between">
               <p>{formatMessageTime(question.createdAt)}</p>
-              <div className="flex items-center justify-between gap-9">
-                {likedPosts[question._id] ? (
-                  <>
-                    <FaThumbsUp
-                      onClick={() => toggleLike(question._id)}
-                      className="w-5 h-5"
-                    />
-                  </>
-                ) : (
-                  <>
-                    <ThumbsUp
-                      onClick={() => toggleLike(question._id)}
-                      className="w-5 h-5"
-                    />
-                  </>
-                )}
-
-                {likedPosts[question._id] ? (
-                  <>
-                    <ThumbsDown
-                      onClick={() => toggleLike(question._id)}
-                      className="w-5 h-5"
-                    />
-                  </>
-                ) : (
-                  <>
-                    <FaThumbsDown
-                      onClick={() => toggleLike(question._id)}
-                      className="w-5 h-5"
-                    />
-                  </>
-                )}
-              </div>
             </div>
           </div>
         </div>

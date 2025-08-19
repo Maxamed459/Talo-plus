@@ -4,6 +4,8 @@ import axios, { AxiosError } from "axios";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Post } from "../../_components/AllQuestions";
+import { formatMessageTime } from "@/app/lib/foramatData";
+import { useRouter } from "next/navigation";
 
 const DiscoverPage = () => {
   const [posts, setPosts] = useState<Post[]>([]);
@@ -39,9 +41,9 @@ const DiscoverPage = () => {
   useEffect(() => {
     fetchPosts();
   }, [fetchPosts]);
-
+  const router = useRouter();
   return (
-    <div className="p-6 w-[90%] mx-auto">
+    <div className="mx-auto p-4">
       <h1 className="text-2xl font-medium mb-4">All Questions</h1>
 
       {/* Search + Tag Inputs */}
@@ -72,27 +74,31 @@ const DiscoverPage = () => {
       <div className="flex flex-col gap-4">
         {posts.map((post) => (
           <div
+            onClick={() => router.push(`/dashboard/${post._id}`)}
             key={post._id}
-            className="border p-4 rounded-lg shadow-sm bg-white"
+            className="flex  justify-between w-full p-2 border-1 border-gray-100/10 shadow"
           >
-            <div className="flex justify-between items-center mb-2">
-              <h2 className="font-semibold text-lg">{post.title}</h2>
-              <span className="text-sm text-gray-500">
-                {new Date(post.createdAt).toLocaleDateString()}
-              </span>
+            <div className="w-4/5">
+              <div className="flex items-center gap-1 mb-4">
+                <div className="w-7 h-7 flex items-center justify-center bg-[#6A69FD] rounded-full">
+                  <p className="text-xl text-center text-white mb-1">
+                    {post.author.username.charAt(0)}
+                  </p>
+                </div>
+                <div className="-space-y-1.5 text-sm">
+                  <p>{post.author.username}</p>
+                  <p className="text-gray-500">{post.author.role}</p>
+                </div>
+              </div>
+              <div className="">
+                <h3 className="font-medium text-xl">{post?.title}</h3>
+                <p className="text-[15px] text-gray-600">{post?.description}</p>
+                <p>{post?.tags}</p>
+              </div>
             </div>
-            <p className="text-gray-700 mb-2">{post.description}</p>
-            <div className="flex flex-wrap gap-2 mb-2">
-              {post.tags.map((tag, index) => (
-                <span
-                  key={index}
-                  className="text-xs bg-gray-200 px-2 py-1 rounded"
-                >
-                  {tag}
-                </span>
-              ))}
+            <div className="w-1/5 flex flex-col items-center justify-between">
+              <p>{formatMessageTime(post.createdAt)}</p>
             </div>
-            <p className="text-sm text-gray-600">By: {post.author.username}</p>
           </div>
         ))}
       </div>

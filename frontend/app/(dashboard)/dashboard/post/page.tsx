@@ -18,6 +18,7 @@ const Questionpage = () => {
     description: "",
     tags: [],
   });
+  const [loading, setLoading] = useState(false);
 
   const url = process.env.NEXT_PUBLIC_BACKEND_URL;
   const handleChange = (
@@ -39,18 +40,31 @@ const Questionpage = () => {
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setLoading(true);
     try {
-      const data = await axios.post(`${url}/api/post/create-post`, formData, {
-        withCredentials: true,
-      });
-      console.log(data);
+      const { data } = await axios.post(
+        `${url}/api/post/create-post`,
+        formData,
+        {
+          withCredentials: true,
+        }
+      );
+      if (data.success) {
+        setFormData({
+          title: "",
+          description: "",
+          tags: [],
+        });
+      }
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="flex items-center justify-center w-full">
+    <div className="flex items-center justify-center w-full p-4">
       <div className="p-6 w-[90%]">
         <div className="space-y-1 mb-6">
           <h1 className="text-2xl font-medium">post</h1>
@@ -67,6 +81,7 @@ const Questionpage = () => {
               </Label>
               <Input
                 onChange={handleChange}
+                value={formData.title}
                 id="title"
                 type="text"
                 placeholder="Enter the title of your question"
@@ -78,6 +93,7 @@ const Questionpage = () => {
                 description
               </Label>
               <Textarea
+                value={formData.description}
                 id="description"
                 onChange={handleChange}
                 placeholder="Enter the content of your question"
@@ -87,14 +103,21 @@ const Questionpage = () => {
               <Label htmlFor="tags" className="text-xs">
                 tags
               </Label>
-              <Input onChange={handleChange} id="tags" type="text" required />
+              <Input
+                onChange={handleChange}
+                id="tags"
+                type="text"
+                required
+                value={formData.tags}
+              />
             </div>
             <div className="grid gap-2">
               <Button
                 type="submit"
                 className="w-full bg-[#000b58] hover:bg-[rgba(0,10,88,0.94)]"
+                disabled={loading}
               >
-                post
+                {loading ? "posting.." : "Post"}
               </Button>
             </div>
           </div>
