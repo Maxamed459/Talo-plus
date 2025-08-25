@@ -79,7 +79,7 @@ const Header = () => {
           {authUser && (
             <li>
               <Link
-                href="/"
+                href="/dashboard"
                 onClick={() =>
                   document
                     .getElementById("mobile-menu")
