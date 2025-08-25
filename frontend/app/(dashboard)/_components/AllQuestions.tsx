@@ -1,8 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import axios, { AxiosError } from "axios";
-import { ThumbsDown, ThumbsUp } from "lucide-react";
-import { FaThumbsDown, FaThumbsUp } from "react-icons/fa";
+import { DeleteIcon, Edit, EllipsisVertical } from "lucide-react";
 import { formatMessageTime } from "@/app/lib/foramatData";
 import { useRouter } from "next/navigation";
 
@@ -25,6 +24,8 @@ const AllQuestions = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const url = process.env.NEXT_PUBLIC_BACKEND_URL;
+  const [isMobile, setIsMobile] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -49,6 +50,15 @@ const AllQuestions = () => {
 
     fetchPosts();
   }, [url]);
+  // Detect mobile or desktop screen
+  useEffect(() => {
+    const checkScreen = () => {
+      setIsMobile(window.innerWidth < 768); // Tailwind md breakpoint
+    };
+    checkScreen();
+    window.addEventListener("resize", checkScreen);
+    return () => window.removeEventListener("resize", checkScreen);
+  }, []);
 
   return (
     <div className="w-full mt-4 mx-auto">
@@ -60,7 +70,7 @@ const AllQuestions = () => {
           <div
             onClick={() => router.push(`/dashboard/${post._id}`)}
             key={post._id}
-            className="w-full p-2 border-1 border-gray-100/10 shadow"
+            className="w-full p-2 border-1 border-gray-300/50 shadow"
           >
             <div className="flex  justify-between">
               <div className="w-4/5">
@@ -92,7 +102,35 @@ const AllQuestions = () => {
                   </div>
                 </div>
               </div>
-              <div className="w-1/5 flex flex-col items-center justify-between">
+              <div className="w-1/5 flex flex-col items-end justify-between">
+                <div
+                  className={`relative py-2 ${isMobile ? "" : "group"}`}
+                  onClick={() => isMobile && setMenuOpen((prev) => !prev)}
+                >
+                  <EllipsisVertical />
+                  <div
+                    className={`absolute top-full right-0 z-20 w-32 p-2 rounded-md
+          bg-gray-200 border border-gray-600 text-[#000b58] transition-all
+          ${
+            isMobile
+              ? menuOpen
+                ? "block"
+                : "hidden"
+              : "hidden group-hover:block"
+          }
+          `}
+                  >
+                    <p className="cursor-pointer text-sm">
+                      <Edit className="inline mr-2 mb-1" size={14} />
+                      Edit
+                    </p>
+                    <hr className="my-2 border-t border-gray-500" />
+                    <p className="cursor-pointer text-sm">
+                      <DeleteIcon className="inline mr-2 mb-1" size={14} />
+                      Delete
+                    </p>
+                  </div>
+                </div>
                 <p className="text-sm">{formatMessageTime(post.createdAt)}</p>
               </div>
             </div>
