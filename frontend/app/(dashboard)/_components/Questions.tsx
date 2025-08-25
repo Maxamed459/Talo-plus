@@ -3,6 +3,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Question } from "../dashboard/post/page";
 import { formatMessageTime } from "@/app/lib/foramatData";
+import { DeleteIcon, Edit, EllipsisVertical } from "lucide-react";
 
 export interface Author {
   _id: string;
@@ -39,6 +40,17 @@ const Questions = () => {
       console.log(questions);
     }
   }, [questions]);
+  const [isMobile, setIsMobile] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  // Detect mobile or desktop screen
+  useEffect(() => {
+    const checkScreen = () => {
+      setIsMobile(window.innerWidth < 768); // Tailwind md breakpoint
+    };
+    checkScreen();
+    window.addEventListener("resize", checkScreen);
+    return () => window.removeEventListener("resize", checkScreen);
+  }, []);
 
   return (
     <div className="flex flex-col items-center justify-between gap-5">
@@ -68,8 +80,36 @@ const Questions = () => {
                 <p>{question?.tags}</p>
               </div>
             </div>
-            <div className="w-1/5 flex flex-col items-center justify-between">
-              <p>{formatMessageTime(question.createdAt)}</p>
+            <div className="w-1/5 flex flex-col items-end justify-between">
+              <div
+                className={`relative py-2 ${isMobile ? "" : "group"}`}
+                onClick={() => isMobile && setMenuOpen((prev) => !prev)}
+              >
+                <EllipsisVertical />
+                <div
+                  className={`absolute top-full right-0 z-20 w-32 p-2 rounded-md
+          bg-gray-200 border border-gray-600 text-[#000b58] transition-all
+          ${
+            isMobile
+              ? menuOpen
+                ? "block"
+                : "hidden"
+              : "hidden group-hover:block"
+          }
+          `}
+                >
+                  <p className="cursor-pointer text-sm">
+                    <Edit className="inline mr-2 mb-1" size={14} />
+                    Edit
+                  </p>
+                  <hr className="my-2 border-t border-gray-500" />
+                  <p className="cursor-pointer text-sm">
+                    <DeleteIcon className="inline mr-2 mb-1" size={14} />
+                    Delete
+                  </p>
+                </div>
+              </div>
+              <p className="text-sm">{formatMessageTime(question.createdAt)}</p>
             </div>
           </div>
         </div>
