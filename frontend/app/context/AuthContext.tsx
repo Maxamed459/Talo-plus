@@ -6,6 +6,7 @@ import axios, { AxiosError } from "axios";
 
 // Types
 interface User {
+  _id: string;
   fullname: string;
   email: string;
   username: string;
