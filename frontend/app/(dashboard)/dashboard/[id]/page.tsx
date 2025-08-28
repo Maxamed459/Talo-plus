@@ -1,6 +1,4 @@
 "use client";
-export const dynamicParams = true; // explicitly allow dynamic params
-
 import axios, { AxiosError } from "axios";
 import React, { useEffect, useState } from "react";
 import { Post } from "../../_components/AllQuestions";
@@ -194,7 +192,7 @@ const CommentsPage = () => {
           </div>
         </div>
       </div>
-      <div className="flex items-center gap-4 fixed bottom-0 w-full bg-transparent backdrop-blur-[5px] border-t-1 border-gray-500/50 shadow p-2">
+      <div className="flex items-center gap-4 fixed bottom-0 max-w-screen mx-auto w-full bg-transparent backdrop-blur-[5px] border-t-1 border-gray-500/50 shadow p-2">
         <PostAnswer id={id} />
       </div>
     </div>
