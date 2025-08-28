@@ -6,11 +6,14 @@ import axios, { AxiosError } from "axios";
 
 // Types
 interface User {
-  _id: string;
   fullname: string;
   email: string;
   username: string;
   role: string;
+}
+
+interface authUser extends User {
+  _id: string;
 }
 
 interface UserData extends User {
@@ -22,7 +25,7 @@ interface LoginUserData {
 }
 
 interface AuthContextType {
-  authUser: User | null;
+  authUser: authUser | null;
   error: string | null;
   registerUser: (userData: UserData) => Promise<void>;
   login: (userData: LoginUserData) => Promise<void>;
@@ -33,7 +36,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   // const [authUser, setAuthUser] = useState<User | null>(null);
-  const [authUser, setAuthUser] = useState<User | null>(() => {
+  const [authUser, setAuthUser] = useState<authUser | null>(() => {
     if (typeof window !== "undefined") {
       const stored = localStorage.getItem("user");
       try {
