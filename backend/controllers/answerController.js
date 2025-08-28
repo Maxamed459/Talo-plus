@@ -69,7 +69,7 @@ export const getAnswersByQuestion = async (req, res) => {
         path: "author",
         select: "username profilePicture role _id", // Exclude _id if not needed
       })
-      .sort({ createdAt: -1 }); // Sort by newest first
+      .sort({ createdAt: 1 }); 
 
     if (answers.length === 0) {
       return res.status(200).json({
