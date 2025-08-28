@@ -5,11 +5,10 @@ import { Send } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { FormEvent, useEffect, useState } from "react";
 
-const PostAnswer = ({ id }: { id: string }) => {
+const PostAnswer = ({ id, onCreated }: { id: string; onCreated: (answer: any) => void }) => {
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState(false);
   const url = process.env.NEXT_PUBLIC_BACKEND_URL;
-  const router = useRouter();
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -26,8 +25,11 @@ const PostAnswer = ({ id }: { id: string }) => {
         }
       );
       if (data.success) {
+        const created = data.answer;
+        if (created) {
+          onCreated(created);
+        }
         setContent("");
-        router.refresh();
       }
     } catch (error) {
       const AxiosError = error as AxiosError<{ message: string }>;
@@ -36,7 +38,6 @@ const PostAnswer = ({ id }: { id: string }) => {
       setLoading(false);
     }
   };
-  useEffect(() => {});
 
   return (
     <form
