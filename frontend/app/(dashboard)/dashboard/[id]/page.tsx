@@ -77,6 +77,10 @@ const CommentsPage = () => {
     return () => window.removeEventListener("resize", checkScreen);
   }, []);
 
+  const handleAnswerCreated = (answer: any) => {
+    setAnswers((prev) => [answer, ...prev]);
+  };
+
   return (
     <div>
       <div className="flex flex-col justify-between p-4">
@@ -193,7 +197,7 @@ const CommentsPage = () => {
         </div>
       </div>
       <div className="flex items-center gap-4 fixed bottom-0 max-w-screen mx-auto w-full bg-transparent backdrop-blur-[5px] border-t-1 border-gray-500/50 shadow p-2">
-        <PostAnswer id={id} />
+        <PostAnswer id={id} onCreated={handleAnswerCreated} />
       </div>
     </div>
   );
