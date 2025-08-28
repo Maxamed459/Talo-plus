@@ -1,9 +1,10 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import axios, { AxiosError } from "axios";
-import { DeleteIcon, Edit, EllipsisVertical } from "lucide-react";
+import { DeleteIcon, Edit, EllipsisVertical, Flag } from "lucide-react";
 import { formatMessageTime } from "@/app/lib/foramatData";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/app/context/AuthContext";
 
 export interface Post {
   _id: string;
@@ -11,6 +12,7 @@ export interface Post {
   description: string;
   tags: string[];
   author: {
+    _id: string;
     role: string;
     username: string;
     profilePicture?: string;
@@ -26,7 +28,7 @@ const AllQuestions = () => {
   const url = process.env.NEXT_PUBLIC_BACKEND_URL;
   const [isMobile, setIsMobile] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-
+  const { authUser } = useAuth();
   useEffect(() => {
     const fetchPosts = async () => {
       setLoading(true);
@@ -91,7 +93,7 @@ const AllQuestions = () => {
                     {post?.description}
                   </p>
                   <div className="flex flex-wrap gap-2 mb-2">
-                    {post.tags.map((tag, index) => (
+                    {post.tags.map((tag: string, index: number) => (
                       <span
                         key={index}
                         className="text-xs bg-gray-200 px-2 py-1 rounded"
@@ -120,7 +122,10 @@ const AllQuestions = () => {
           }
           `}
                   >
-                    <p className="cursor-pointer text-sm">
+                    {
+                      post.author?._id === authUser?._id ? (
+                        <>
+                        <p className="cursor-pointer text-sm">
                       <Edit className="inline mr-2 mb-1" size={14} />
                       Edit
                     </p>
@@ -128,7 +133,14 @@ const AllQuestions = () => {
                     <p className="cursor-pointer text-sm">
                       <DeleteIcon className="inline mr-2 mb-1" size={14} />
                       Delete
+                    </p></>)  :
+                    (
+                      <p className="cursor-pointer text-sm">
+                      <Flag className="inline mr-2 mb-1" size={14} />
+                      Report
                     </p>
+                    )
+                  }
                   </div>
                 </div>
                 <p className="text-sm">{formatMessageTime(post.createdAt)}</p>

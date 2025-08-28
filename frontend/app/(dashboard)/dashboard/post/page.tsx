@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 import React, { FormEvent, useState } from "react";
 
 export interface Question {
@@ -35,9 +36,9 @@ const Questionpage = () => {
               .filter(Boolean) // remove empty tags
           : value,
     }));
-    console.log(formData);
   };
 
+  const router = useRouter()
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setLoading(true);
@@ -50,7 +51,7 @@ const Questionpage = () => {
         }
       );
       if (data.success) {
-        console.log("data");
+        router.push("/dashboard");
       }
     } catch (error) {
       console.log(error);

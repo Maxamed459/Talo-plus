@@ -6,7 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Post } from "../../_components/AllQuestions";
 import { formatMessageTime } from "@/app/lib/foramatData";
 import { useRouter } from "next/navigation";
-import { DeleteIcon, Edit, EllipsisVertical } from "lucide-react";
+import { DeleteIcon, Edit, EllipsisVertical, Flag } from "lucide-react";
+import { useAuth } from "@/app/context/AuthContext";
 
 const DiscoverPage = () => {
   const [posts, setPosts] = useState<Post[]>([]);
@@ -16,6 +17,7 @@ const DiscoverPage = () => {
   const [tag, setTag] = useState(""); // tag filter state
 
   const url = process.env.NEXT_PUBLIC_BACKEND_URL;
+  const { authUser } = useAuth();
 
   const fetchPosts = useCallback(async () => {
     setLoading(true);
@@ -105,7 +107,16 @@ const DiscoverPage = () => {
               <div className="">
                 <h3 className="font-medium text-xl">{post?.title}</h3>
                 <p className="text-[15px] text-gray-600">{post?.description}</p>
-                <p>{post?.tags}</p>
+                <div className="flex flex-wrap gap-2 mb-2">
+                    {post.tags.map((tag: string, index: number) => (
+                      <span
+                        key={index}
+                        className="text-xs bg-gray-200 px-2 py-1 rounded"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
               </div>
             </div>
             <div className="w-1/5 flex flex-col items-end justify-between">
@@ -126,15 +137,25 @@ const DiscoverPage = () => {
           }
           `}
                 >
-                  <p className="cursor-pointer text-sm">
-                    <Edit className="inline mr-2 mb-1" size={14} />
-                    Edit
-                  </p>
-                  <hr className="my-2 border-t border-gray-500" />
-                  <p className="cursor-pointer text-sm">
-                    <DeleteIcon className="inline mr-2 mb-1" size={14} />
-                    Delete
-                  </p>
+                 {
+                      post.author?._id === authUser?._id ? (
+                        <>
+                        <p className="cursor-pointer text-sm">
+                      <Edit className="inline mr-2 mb-1" size={14} />
+                      Edit
+                    </p>
+                    <hr className="my-2 border-t border-gray-500" />
+                    <p className="cursor-pointer text-sm">
+                      <DeleteIcon className="inline mr-2 mb-1" size={14} />
+                      Delete
+                    </p></>)  :
+                    (
+                      <p className="cursor-pointer text-sm">
+                      <Flag className="inline mr-2 mb-1" size={14} />
+                      Report
+                    </p>
+                    )
+                  }
                 </div>
               </div>
               <p className="text-sm">{formatMessageTime(post.createdAt)}</p>
