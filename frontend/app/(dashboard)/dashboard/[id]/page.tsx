@@ -77,7 +77,7 @@ const CommentsPage = () => {
     return () => window.removeEventListener("resize", checkScreen);
   }, []);
 
-  const handleAnswerCreated = (answer: any) => {
+  const handleAnswerCreated = (answer: Answer) => {
     setAnswers((prev) => [answer, ...prev]);
   };
   return (

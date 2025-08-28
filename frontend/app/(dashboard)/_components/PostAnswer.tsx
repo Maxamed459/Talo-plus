@@ -4,8 +4,9 @@ import axios, { AxiosError } from "axios";
 import { Send } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { FormEvent, useEffect, useState } from "react";
+import { Answer } from "../dashboard/[id]/page";
 
-const PostAnswer = ({ id, onCreated }: { id: string; onCreated: (answer: any) => void }) => {
+const PostAnswer = ({ id, onCreated }: { id: string; onCreated: (answer: Answer) => void }) => {
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState(false);
   const url = process.env.NEXT_PUBLIC_BACKEND_URL;
