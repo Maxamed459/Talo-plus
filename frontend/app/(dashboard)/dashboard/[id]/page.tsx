@@ -80,7 +80,6 @@ const CommentsPage = () => {
   const handleAnswerCreated = (answer: any) => {
     setAnswers((prev) => [answer, ...prev]);
   };
-
   return (
     <div>
       <div className="flex flex-col justify-between p-4">
