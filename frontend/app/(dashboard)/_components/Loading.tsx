@@ -1,14 +1,16 @@
 "use client";
 import { useAuth } from "@/app/context/AuthContext";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useEffect } from "react";
 
 const Loading = ({ height = "100vh" }) => {
   const { authUser } = useAuth();
   const router = useRouter();
-  if (!authUser) {
-    router.push("/login");
-  }
+  useEffect(() => {
+    if (!authUser) {
+      router.push("/login");
+    }
+  }, [authUser, router]);
   return (
     <div
       style={{ height }}

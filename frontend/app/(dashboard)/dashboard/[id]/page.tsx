@@ -1,4 +1,6 @@
 "use client";
+export const dynamicParams = true; // explicitly allow dynamic params
+
 import axios, { AxiosError } from "axios";
 import React, { useEffect, useState } from "react";
 import { Post } from "../../_components/AllQuestions";
