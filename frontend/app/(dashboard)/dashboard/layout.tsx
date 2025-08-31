@@ -18,7 +18,9 @@ export default function DashboardLayout({
     <html lang="en">
       <body>
         <AuthProvider>
-          <DashboardShell>{children}</DashboardShell>
+          <DashboardShell>
+            {children}
+          </DashboardShell>
         </AuthProvider>
       </body>
     </html>
