@@ -182,9 +182,9 @@ const CommentsPage = () => {
                         </span>
                       </div>
                     </div>
-                    <p className="text-gray-800 whitespace-pre-wrap">
+                    <p className="text-gray-800 whitespace-pre-wrap px-6">
                       {answer.content}
-                    </p>
+                    </p>``
                   </div>
                 ))}
               </>
