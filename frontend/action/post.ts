@@ -34,7 +34,7 @@ export async function submitAction(prevState: FormState, formData: FormData){
       headers: {
         Authorization: `Bearer ${token}`,
         // keep Cookie if your backend also reads cookie-based auth/session
-        Cookie: cookies().toString(),
+        Cookie: (await cookies()).toString(),
         "Content-Type": "application/json",
       },
       // withCredentials is not needed for server-to-server, but harmless
