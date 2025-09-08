@@ -2,7 +2,6 @@
 
 import axios, { AxiosError } from "axios";
 import { cookies } from "next/headers";
-
 export type Errors = { title?: string; description?: string; tags?: string[]; form?: string };
 export type FormState = { errors: Errors };
 
@@ -27,16 +26,18 @@ export async function submitAction(prevState: FormState, formData: FormData){
   try {
     // Example post
     const url = process.env.NEXT_PUBLIC_BACKEND_URL;
-    // const token = (await cookies()).get("token")?.value || "";
-    await axios.post(`${url}/api/post/create-post`, { title, description, tags }, {
-      headers: {
-        // keep Cookie if your backend also reads cookie-based auth/session
-        Cookie: (await cookies()).get("token")?.toString(),
-        "Content-Type": "application/json",
-      },
+    if (!url) throw new Error("BACKEND_URL is missing");
+    // 🔑 Get the cookie from the user request
+    const cookieStore = await cookies();
+    const token = cookieStore.get("token")?.value;
+    await axios.post(`${url}/api/post/create-post`, { title, description, tags },
       // withCredentials is not needed for server-to-server, but harmless
-      withCredentials: true,
-    });
+      {
+        headers: {
+          Cookie: `token=${token}`,
+        },
+      }
+    );
   } catch (err) {
     // Optional: map server error into a field or a general error
     const axiosError = err as AxiosError<{ message: string }>;
