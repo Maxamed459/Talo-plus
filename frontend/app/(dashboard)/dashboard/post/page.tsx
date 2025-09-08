@@ -1,11 +1,10 @@
 "use client";
+import { FormState, submitAction } from "@/action/post";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import axios from "axios";
-import { useRouter } from "next/navigation";
-import React, { FormEvent, useState } from "react";
+import React, { useActionState } from "react";
 
 export interface Question {
   title: string;
@@ -14,51 +13,15 @@ export interface Question {
 }
 
 const Questionpage = () => {
-  const [formData, setFormData] = useState<Question>({
-    title: "",
-    description: "",
-    tags: [],
-  });
-  const [loading, setLoading] = useState(false);
 
-  const url = process.env.NEXT_PUBLIC_BACKEND_URL;
-  const handleChange = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { id, value } = event.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [id]:
-        id === "tags"
-          ? value
-              .split(",")
-              .map((tag) => tag.trim())
-              .filter(Boolean) // remove empty tags
-          : value,
-    }));
-  };
+  const initialState: FormState = {
+    errors: {}
+  }
 
-  const router = useRouter()
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    setLoading(true);
-    try {
-      const { data } = await axios.post(
-        `${url}/api/post/create-post`,
-        formData,
-        {
-          withCredentials: true,
-        }
-      );
-      if (data.success) {
-        router.push("/dashboard");
-      }
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const [state, formAction, isPending] = useActionState(
+    submitAction, 
+    initialState
+  )
 
   return (
     <div className="flex items-center justify-center w-full p-4">
@@ -70,19 +33,20 @@ const Questionpage = () => {
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="w-full">
+        <form action={formAction} className="w-full">
           <div className="flex flex-col gap-4">
+            {state?.errors.form && <div className="p-2 bg-red-300 text-red-800"><p className="text-sm">{state.errors.form}</p></div>}
             <div className="grid gap-2">
               <Label htmlFor="title" className="text-xs">
                 title
               </Label>
               <Input
-                onChange={handleChange}
                 id="title"
                 type="text"
+                name="title"
                 placeholder="Enter the title of your question"
-                required
               />
+              {state?.errors.title && <p className="text-red-600 text-xs">{state?.errors.title}</p>}
             </div>
             <div className="grid gap-2 relative">
               <Label htmlFor="content" className="text-xs">
@@ -90,23 +54,25 @@ const Questionpage = () => {
               </Label>
               <Textarea
                 id="description"
-                onChange={handleChange}
+                name="description"
                 placeholder="Enter the content of your question"
               />
+              {state?.errors.description && <p className="text-red-600 text-xs">{state.errors.description}</p>}
             </div>
             <div className="grid gap-2 relative">
               <Label htmlFor="tags" className="text-xs">
                 tags
               </Label>
-              <Input onChange={handleChange} id="tags" type="text" required />
+              <Input name="tags" id="tags" type="text"  />
+              {state?.errors.tags && <p className="text-red-600 text-xs">{state?.errors.tags}</p>}
             </div>
             <div className="grid gap-2">
               <Button
                 type="submit"
                 className="w-full bg-[#000b58] hover:bg-[rgba(0,10,88,0.94)]"
-                disabled={loading}
+                disabled={isPending}
               >
-                {loading ? "posting.." : "Post"}
+                {isPending ? "posting.." : "Post"}
               </Button>
             </div>
           </div>
