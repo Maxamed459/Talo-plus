@@ -5,6 +5,7 @@ import { DeleteIcon, Edit, EllipsisVertical, Flag } from "lucide-react";
 import { formatMessageTime } from "@/app/lib/foramatData";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/app/context/AuthContext";
+import Delete from "./Delete";
 
 export interface Post {
   _id: string;
@@ -28,6 +29,8 @@ const AllQuestions = () => {
   const url = process.env.NEXT_PUBLIC_BACKEND_URL;
   const [isMobile, setIsMobile] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
   const { authUser } = useAuth();
   useEffect(() => {
     const fetchPosts = async () => {
@@ -35,10 +38,13 @@ const AllQuestions = () => {
       setError("");
       try {
         const { data } = await axios.get(`${url}/api/post/get-all-posts`, {
+          params: { page, limit: 10, search: "", tag: undefined, sortBy: "newest" },
           withCredentials: true,
         });
         if (data.success) {
-          setPosts(data.data);
+          setPosts(prev => [...prev, ...data.data]);
+          setHasMore(data.currentPage < data.totalPages);
+          setPage(prev => prev + 1);
         }
       } catch (err) {
         const axiosError = err as AxiosError<{ message: string }>;
@@ -130,10 +136,7 @@ const AllQuestions = () => {
                       Edit
                     </p>
                     <hr className="my-2 border-t border-gray-500" />
-                    <p className="cursor-pointer text-sm">
-                      <DeleteIcon className="inline mr-2 mb-1" size={14} />
-                      Delete
-                    </p></>)  :
+                      <Delete /></>)  :
                     (
                       <p className="cursor-pointer text-sm">
                       <Flag className="inline mr-2 mb-1" size={14} />
