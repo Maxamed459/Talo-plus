@@ -2,7 +2,6 @@
 
 import axios, { AxiosError } from "axios";
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 
 export type Errors = { title?: string; description?: string; tags?: string[]; form?: string };
 export type FormState = { errors: Errors };
@@ -28,13 +27,11 @@ export async function submitAction(prevState: FormState, formData: FormData){
   try {
     // Example post
     const url = process.env.NEXT_PUBLIC_BACKEND_URL;
-    const token = (await cookies()).get("token")?.value || "";
-    console.log(token)
+    // const token = (await cookies()).get("token")?.value || "";
     await axios.post(`${url}/api/post/create-post`, { title, description, tags }, {
       headers: {
-        Authorization: `Bearer ${token}`,
         // keep Cookie if your backend also reads cookie-based auth/session
-        Cookie: (await cookies()).toString(),
+        Cookie: (await cookies()).get("token")?.toString(),
         "Content-Type": "application/json",
       },
       // withCredentials is not needed for server-to-server, but harmless
