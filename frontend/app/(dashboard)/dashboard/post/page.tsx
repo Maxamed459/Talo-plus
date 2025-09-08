@@ -19,7 +19,7 @@ const Questionpage = () => {
   }
 
   const [state, formAction, isPending] = useActionState(
-    submitAction, 
+    submitAction as (s: FormState | undefined, f: FormData) => Promise<FormState>, 
     initialState
   )
 
