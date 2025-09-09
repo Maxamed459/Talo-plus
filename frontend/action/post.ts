@@ -27,15 +27,19 @@ export async function submitAction(prevState: FormState, formData: FormData){
     // Example post
     const url = process.env.NEXT_PUBLIC_BACKEND_URL;
     if (!url) throw new Error("BACKEND_URL is missing");
-    // 🔑 Get the cookie from the user request
+    // Get the cookie from the user request
     const cookieStore = await cookies();
     const token = cookieStore.get("token")?.value;
-    await axios.post(`${url}/api/post/create-post`, { title, description, tags },
-      // withCredentials is not needed for server-to-server, but harmless
+    await axios.post(
+      `${url}/api/post/create-post`,
+      { title, description, tags },
       {
+        // Server-to-server; attach cookie if present and Authorization as fallback
         headers: {
-          Cookie: `token=${token}`,
+          ...(token ? { Cookie: `token=${token}` } : {}),
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
         },
+        withCredentials: true,
       }
     );
   } catch (err) {
