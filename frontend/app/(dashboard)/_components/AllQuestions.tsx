@@ -1,11 +1,20 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import axios, { AxiosError } from "axios";
-import { DeleteIcon, Edit, EllipsisVertical, Flag } from "lucide-react";
+import { ArrowRight, Edit, EllipsisVertical, Flag } from "lucide-react";
 import { formatMessageTime } from "@/app/lib/foramatData";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/app/context/AuthContext";
 import Delete from "./Delete";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export interface Post {
   _id: string;
@@ -26,38 +35,67 @@ const AllQuestions = () => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const url = process.env.NEXT_PUBLIC_BACKEND_URL;
-  const [isMobile, setIsMobile] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedTag, setSelectedTag] = useState("");
+  const [sortBy, setSortBy] = useState("newest");
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
+  const [totalPages, setTotalPages] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  
+  const url = process.env.NEXT_PUBLIC_BACKEND_URL;
   const { authUser } = useAuth();
-  useEffect(() => {
-    const fetchPosts = async () => {
-      setLoading(true);
-      setError("");
-      try {
-        const { data } = await axios.get(`${url}/api/post/get-all-posts`, {
-          params: { page, limit: 10, search: "", tag: undefined, sortBy: "newest" },
-          withCredentials: true,
-        });
-        if (data.success) {
+  const fetchPosts = async (reset = false) => {
+    setLoading(true);
+    setError("");
+    
+    try {
+      const { data } = await axios.get(`${url}/api/post/questions`, {
+        params: { 
+          page: reset ? 1 : page, 
+          limit: 10, 
+          search: searchTerm, 
+          tag: selectedTag || undefined, 
+          sortBy: sortBy 
+        },
+        withCredentials: true,
+      });
+      
+      if (data.success) {
+        if (reset) {
+          setPosts(data.data);
+          setPage(2);
+        } else {
           setPosts(prev => [...prev, ...data.data]);
-          setHasMore(data.currentPage < data.totalPages);
           setPage(prev => prev + 1);
         }
-      } catch (err) {
-        const axiosError = err as AxiosError<{ message: string }>;
-        setError(
-          axiosError?.response?.data?.message || "Failed to fetch posts"
-        );
-      } finally {
-        setLoading(false);
+        setHasMore(data.currentPage < data.totalPages);
+        setTotalPages(data.totalPages);
       }
-    };
+    } catch (err) {
+      const axiosError = err as AxiosError<{ message: string }>;
+      setError(
+        axiosError?.response?.data?.message || "Failed to fetch posts"
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    fetchPosts();
-  }, [url]);
+  // Reset and fetch when search/filter changes
+  useEffect(() => {
+    setPosts([]);
+    setPage(1);
+    fetchPosts(true);
+  }, [searchTerm, selectedTag, sortBy]);
+
+  // Load more posts
+  const loadMore = () => {
+    if (!loading && hasMore) {
+      fetchPosts();
+    }
+  };
   // Detect mobile or desktop screen
   useEffect(() => {
     const checkScreen = () => {
@@ -69,9 +107,35 @@ const AllQuestions = () => {
   }, []);
 
   return (
-    <div className="w-full mt-4 mx-auto">
-      <h1 className="text-2xl font-medium mb-4">All Posts</h1>
-      {loading && <p>Loading posts...</p>}
+    <div className="w-full mx-auto">
+      {/* Search and Filter Controls */}
+      <div className="mb-4 flex gap-2">
+        <input
+          type="text"
+          placeholder="Search questions..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="px-3 py-1 border border-slate-800 rounded-md w-4/5"
+        />
+        <Select
+          value={sortBy}
+          onValueChange={(value: string) => setSortBy(value)}
+        >
+          <SelectTrigger className="w-1/5 border-slate-700">
+            <SelectValue placeholder="Select a role" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectItem value="newest">Newest First</SelectItem>
+              <SelectItem value="oldest">Oldest First</SelectItem>
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+      </div>
+
+      {loading && posts.length === 0 && <div className="flex items-center justify-center h-screen">
+      <div className="animate-spin rounded-full h-28 w-28 border-b-4 border-b-[#CCF913] border-t-4 border-t-[#6A67FC]"></div>
+    </div>}
       {error && <p className="text-red-500">{error}</p>}
       <div className="flex flex-col gap-4">
         {posts.map((post) => (
@@ -98,7 +162,7 @@ const AllQuestions = () => {
                   <p className="text-[15px] text-gray-600">
                     {post?.description}
                   </p>
-                  <div className="flex flex-wrap gap-2 mb-2">
+                  <div className="flex flex-wrap gap-2 my-2">
                     {post.tags.map((tag: string, index: number) => (
                       <span
                         key={index}
@@ -152,6 +216,19 @@ const AllQuestions = () => {
           </div>
         ))}
       </div>
+      {/* Load More Button */}
+      {hasMore && (
+        <button
+          onClick={loadMore}
+          disabled={loading}
+          className="mt-4 text-black disabled:opacity-50 flex items-center justify-center gap-1 border-l-3 border-[#6A67FC]"
+        >
+          
+          <p className="px-2">{loading ? "Loading..." : "Read More"}</p>
+          <ArrowRight className="w-4 h-4 mt-1" />
+          
+        </button>
+      )}
     </div>
   );
 };

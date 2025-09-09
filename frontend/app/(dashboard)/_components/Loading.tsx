@@ -3,7 +3,7 @@ import { useAuth } from "@/app/context/AuthContext";
 import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 
-const Loading = ({ height = "100vh" }) => {
+const Loading = () => {
   const { authUser } = useAuth();
   const router = useRouter();
   useEffect(() => {
@@ -12,11 +12,8 @@ const Loading = ({ height = "100vh" }) => {
     }
   }, [authUser, router]);
   return (
-    <div
-      style={{ height }}
-      className="flex items-center justify-center h-screen"
-    >
-      <div className="w-10 h-10 rounded-full border-3 border-[#000b58] border-t-transparent animate-spin"></div>
+    <div className="flex items-center justify-center h-screen">
+      <div className="animate-spin rounded-full h-28 w-28 border-b-4 border-b-[#CCF913] border-t-4 border-t-[#6A67FC]"></div>
     </div>
   );
 };

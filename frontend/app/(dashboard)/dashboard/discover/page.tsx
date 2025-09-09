@@ -23,7 +23,7 @@ const DiscoverPage = () => {
     setLoading(true);
     setError("");
     try {
-      const { data } = await axios.get(`${url}/api/post/get-all-posts`, {
+      const { data } = await axios.get(`${url}/api/post/questions`, {
         params: {
           search,
           tag,
@@ -107,7 +107,7 @@ const DiscoverPage = () => {
               <div className="">
                 <h3 className="font-medium text-xl">{post?.title}</h3>
                 <p className="text-[15px] text-gray-600">{post?.description}</p>
-                <div className="flex flex-wrap gap-2 mb-2">
+                <div className="flex flex-wrap gap-2 my-2">
                     {post.tags.map((tag: string, index: number) => (
                       <span
                         key={index}
