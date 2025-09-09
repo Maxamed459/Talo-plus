@@ -109,7 +109,7 @@ const AllQuestions = () => {
   return (
     <div className="w-full mx-auto">
       {/* Search and Filter Controls */}
-      <div className="mb-4 flex gap-2">
+      <div className="mb-4 w-[85%] md:w-full flex gap-2">
         <input
           type="text"
           placeholder="Search questions..."
