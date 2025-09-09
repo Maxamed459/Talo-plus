@@ -117,6 +117,9 @@ const DiscoverPage = () => {
                       </span>
                     ))}
                   </div>
+                  <div className="w-[15%] border-l-4 border-[#6A69FD]">
+                    <p className="px-2 bg-[#6A69FD]/20 font-medium text-black rounded-r-full">answers {post.answers?.length || 0}</p>
+                  </div>
               </div>
             </div>
             <div className="w-1/5 flex flex-col items-end justify-between">
