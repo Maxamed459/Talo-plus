@@ -142,7 +142,7 @@ export const getAllQuestions = async (req, res) => {
       search = "",
       tag,
       sortBy = "newest",
-      limit = 10,
+      limit = 20,
       page = 1,
     } = req.query;
     const query = {};
