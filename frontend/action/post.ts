@@ -1,7 +1,6 @@
-"use server"
+"use client"
 
 import axios, { AxiosError } from "axios";
-import { cookies } from "next/headers";
 export type Errors = { title?: string; description?: string; tags?: string[]; form?: string };
 export type FormState = { errors: Errors };
 
@@ -24,28 +23,20 @@ export async function submitAction(prevState: FormState, formData: FormData){
   }
 
   try {
-    // Example post
     const url = process.env.NEXT_PUBLIC_BACKEND_URL;
     if (!url) throw new Error("BACKEND_URL is missing");
-    // Get the cookie from the user request
-    const cookieStore = await cookies();
-    const token = cookieStore.get("token")?.value;
-    await axios.post(
+    const response = await axios.post(
       `${url}/api/post/create-post`,
       { title, description, tags },
       {
-        // Server-to-server; attach cookie if present and Authorization as fallback
-        headers: {
-          ...(token ? { Cookie: `token=${token}` } : {}),
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
-        },
-        withCredentials: true,
+        withCredentials: true
       }
     );
+    return { errors: {} };
   } catch (err) {
     // Optional: map server error into a field or a general error
     const axiosError = err as AxiosError<{ message: string }>;
     console.log(axiosError)
-    return { errors: { form: axiosError.response?.data.message } };
+    return { errors: { form: axiosError.response?.data.message || "Something went wrong" } };
   }
 }
