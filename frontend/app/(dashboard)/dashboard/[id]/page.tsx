@@ -55,7 +55,7 @@ const CommentsPage = () => {
           }
         );
         if (data.success) {
-          setAnswers(data.answers);
+          setAnswers(Array.isArray(data.answers) ? data.answers : []);
           setError("");
           console.log(data);
         }
@@ -78,7 +78,7 @@ const CommentsPage = () => {
   }, []);
 
   const handleAnswerCreated = (answer: Answer) => {
-    setAnswers((prev) => [answer, ...prev]);
+    setAnswers((prev) => [answer, ...((Array.isArray(prev) ? prev : []))]);
   };
   return (
     <div>
@@ -184,7 +184,7 @@ const CommentsPage = () => {
                     </div>
                     <p className="text-gray-800 whitespace-pre-wrap px-6">
                       {answer.content}
-                    </p>``
+                    </p>
                   </div>
                 ))}
               </>

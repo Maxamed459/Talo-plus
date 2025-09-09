@@ -2,7 +2,6 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import axios, { AxiosError } from "axios";
 import { Send } from "lucide-react";
-import { useRouter } from "next/navigation";
 import React, { FormEvent, useEffect, useState } from "react";
 import { Answer } from "../dashboard/[id]/page";
 
