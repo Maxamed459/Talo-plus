@@ -151,7 +151,7 @@ const CommentsPage = () => {
           </div>
         )}
           {/* Answers list */}
-          <div className="mt-4 overflow-y-hidden">
+          <div className="mt-4 overflow-y-auto overflow-x-hidden">
             <h2 className="text-2xl font-bold mb-6">
               Answers ({answers?.length || 0})
             </h2>
@@ -191,7 +191,7 @@ const CommentsPage = () => {
             )}
           </div>
       </div>
-      <div className="flex items-center gap-4 fixed bottom-0 max-w-screen mx-auto w-full bg-transparent backdrop-blur-[5px] border-t-1 border-gray-500/50 shadow p-2">
+      <div className="flex items-center gap-4 bottom-0 max-w-screen mx-auto w-full bg-transparent backdrop-blur-[5px] border-t-1 border-gray-500/50 shadow p-2">
         <PostAnswer id={id} onCreated={handleAnswerCreated} />
       </div>
     </div>

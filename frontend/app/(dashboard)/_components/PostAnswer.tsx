@@ -42,7 +42,7 @@ const PostAnswer = ({ id, onCreated }: { id: string; onCreated: (answer: Answer)
   return (
     <form
       onSubmit={handleSubmit}
-      className="w-[95%] mx-auto md:mx-4 md:w-[75%]"
+      className="w-full mx-auto md:mx-4"
     >
       <div className="flex flex-col">
         <Textarea
