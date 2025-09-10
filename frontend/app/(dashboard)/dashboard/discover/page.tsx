@@ -58,7 +58,6 @@ const DiscoverPage = () => {
   const router = useRouter();
   return (
     <div className="mx-auto p-4">
-      <h1 className="text-2xl font-medium mb-4">All Questions</h1>
 
       {/* Search + Tag Inputs */}
       <div className="flex gap-2 mb-4">
