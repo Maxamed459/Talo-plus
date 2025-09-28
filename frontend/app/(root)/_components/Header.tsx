@@ -2,16 +2,16 @@
 import Link from "next/link";
 import React from "react";
 import { useAuth } from "../../context/AuthContext";
+import Image from "next/image";
+import { Button } from "@/components/ui/button";
 
 const Header = () => {
   const { authUser, logout } = useAuth();
   return (
     <>
-      <div className="flex items-center justify-between">
+      <div className="max-w-[90%] md:max-w-6xl mx-auto flex items-center justify-between">
         <Link href="/">
-          <h1 className="text-2xl font-bold text-[#000b58] cursor-pointer">
-            Talo+
-          </h1>
+          <Image src="/dash-logo-02.png" alt="logo" width={120} height={120} />
         </Link>
         {/* Desktop Navigation */}
         <nav className="hidden md:block">
@@ -25,6 +25,12 @@ const Header = () => {
               <Link href="/">About</Link>
             </li>
             <li>
+              <Link href="/">price</Link>
+            </li>
+            <li>
+              <Link href="/">features</Link>
+            </li>
+            <li>
               <Link href="/">Contact</Link>
             </li>
           </ul>
@@ -33,21 +39,18 @@ const Header = () => {
         <div className="hidden md:flex space-x-4">
           {authUser ? (
             <>
-              <button
-                className="px-4 py-2 bg-gradient-to-r from-[#000b58] to-purple-700 text-white rounded"
-                onClick={() => logout()}
-              >
+              <Button onClick={() => logout()}>
                 <Link href="/register">Logout</Link>
-              </button>
+              </Button>
             </>
           ) : (
             <>
-              <button className="px-4 py-2 bg-gradient-to-r from-[#000b58] to-purple-700 text-white rounded">
+              <Button className="bg-transparent border-1 border-black text-black hover:text-white">
                 <Link href="/login">Login</Link>
-              </button>
-              <button className="px-4 py-2 bg-gradient-to-r from-[#000b58] to-purple-700 text-white rounded">
+              </Button>
+              <Button>
                 <Link href="/register">Sign Up</Link>
-              </button>
+              </Button>
             </>
           )}
         </div>
@@ -114,21 +117,18 @@ const Header = () => {
         <div className="flex flex-col space-y-2 mt-4">
           {authUser ? (
             <>
-              <button
-                className="px-4 py-2 bg-gradient-to-r from-[#000b58] to-purple-700 text-white rounded cursor-pointer"
-                onClick={logout}
-              >
-                Logout
-              </button>
+              <Button onClick={() => logout()}>
+                <Link href="/register">Logout</Link>
+              </Button>
             </>
           ) : (
             <>
-              <button className="px-4 py-2 bg-gradient-to-r from-[#000b58] to-purple-700 text-white rounded cursor-pointer">
+              <Button className="bg-transparent border-1 border-black text-black hover:text-white">
                 <Link href="/login">Login</Link>
-              </button>
-              <button className="px-4 py-2 bg-gradient-to-r from-[#000b58] to-purple-700 text-white rounded cursor-pointer">
+              </Button>
+              <Button>
                 <Link href="/register">Sign Up</Link>
-              </button>
+              </Button>
             </>
           )}
         </div>
