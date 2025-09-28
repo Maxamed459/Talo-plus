@@ -4,6 +4,9 @@ export const metadata = {
   title: "Register & Login | Talo+",
   description:
     "Register a new account or login to your existing Talo+ account.",
+  icons: {
+    icon: "/favicon.svg", // path is relative to /public
+  },
 };
 
 export default function AuthLayout({

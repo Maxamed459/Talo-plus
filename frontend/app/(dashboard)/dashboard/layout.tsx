@@ -7,6 +7,9 @@ export const metadata = {
   title: "Dashboard",
   description:
     "View the latest questions and answers. Stay updated with recent activity and manage your account from here.",
+  icons: {
+    icon: "/favicon.svg", // path is relative to /public
+  },
 };
 
 export default function DashboardLayout({
@@ -18,9 +21,7 @@ export default function DashboardLayout({
     <html lang="en">
       <body>
         <AuthProvider>
-          <DashboardShell>
-            {children}
-          </DashboardShell>
+          <DashboardShell>{children}</DashboardShell>
         </AuthProvider>
       </body>
     </html>
