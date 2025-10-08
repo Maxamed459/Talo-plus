@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import axios, { AxiosError } from "axios";
 
@@ -27,6 +27,7 @@ interface LoginUserData {
 interface AuthContextType {
   authUser: authUser | null;
   error: string | null;
+  loading: boolean;
   registerUser: (userData: UserData) => Promise<void>;
   login: (userData: LoginUserData) => Promise<void>;
   logout: () => void;
@@ -51,6 +52,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const url = process.env.NEXT_PUBLIC_BACKEND_URL;
 
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false)
   const router = useRouter();
 
   useEffect(() => {
@@ -63,6 +65,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const registerUser = async (userData: UserData) => {
     try {
+      setLoading(true)
       const { data } = await axios.post(`${url}/api/user/signUp`, userData);
       if (data.success) {
         console.log(data);
@@ -74,11 +77,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     } catch (err) {
       const axiosError = err as AxiosError<{ message: string }>;
       setError(axiosError?.response?.data?.message || "Registration failed");
+    } finally{
+      setLoading(false)
     }
   };
 
   const login = async (userData: LoginUserData) => {
     try {
+      setLoading(true)
       const { data } = await axios.post(`${url}/api/user/signIn`, userData, {
         withCredentials: true,
       });
@@ -93,6 +99,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     } catch (err) {
       const axiosError = err as AxiosError<{ message: string }>;
       setError(axiosError?.response?.data?.message || "Login failed");
+    }finally{
+      setLoading(false)
     }
   };
 
@@ -121,6 +129,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       value={{
         authUser,
         error,
+        loading,
         registerUser,
         login,
         logout,
