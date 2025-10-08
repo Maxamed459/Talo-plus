@@ -16,7 +16,7 @@ interface FormData {
 }
 
 const Loginpage = () => {
-  const { login, error, authUser } = useAuth();
+  const { login, error, authUser, loading } = useAuth();
   const router = useRouter();
   useEffect(() => {
     if (authUser) {
@@ -104,7 +104,8 @@ const Loginpage = () => {
             <div className="grid gap-2">
               <Button
                 type="submit"
-                className="w-full bg-[#000b58] hover:bg-[rgba(0,10,88,0.94)]"
+                className="w-full bg-[#000b58] hover:bg-[rgba(0,10,88,0.94)] disabled:opacity-50"
+                disabled={loading}
               >
                 Login
               </Button>
