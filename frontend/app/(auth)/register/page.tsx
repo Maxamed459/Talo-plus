@@ -32,7 +32,7 @@ export interface ShowPass {
 }
 
 const Registerpage = () => {
-  const { registerUser, error, authUser } = useAuth(); // 👈 get from context
+  const { registerUser, error, authUser, loading } = useAuth(); // 👈 get from context
   const router = useRouter();
   useEffect(() => {
     if (authUser) {
@@ -214,7 +214,8 @@ const Registerpage = () => {
               <div className="grid gap-2">
                 <Button
                   type="submit"
-                  className="w-full bg-[#000b58] hover:bg-[rgba(0,10,88,0.94)]"
+                  className="w-full bg-[#000b58] hover:bg-[rgba(0,10,88,0.94)] disabled:opacity-50"
+                  disabled={loading}
                 >
                   Create account
                 </Button>
